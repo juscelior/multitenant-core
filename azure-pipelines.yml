@@ -31,5 +31,5 @@ stages:
         inputs:
           command: 'pack'
           packagesToPack: '**/MultiTenant.Core.csproj'
-          versioningScheme: 'byBuildNumber'
+          versioningScheme: 'off'
 
