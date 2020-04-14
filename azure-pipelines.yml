@@ -9,14 +9,18 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'restore'
-    projects: '**/MultiTenant.Core.csproj'
-    feedsToUse: 'select'
+stages:
+- stage: build
+  jobs:
+    - job:
+      steps:
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'restore'
+          projects: '**/MultiTenant.Core.csproj'
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
-    projects: '**/MultiTenant.Core.csproj'
-    arguments: '-c Release'
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'build'
+          projects: '**/MultiTenant.Core.csproj'
+          arguments: '-c Release'
