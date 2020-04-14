@@ -32,5 +32,5 @@ stages:
           command: 'pack'
           packagesToPack: '**/MultiTenant.Core.csproj'
           versioningScheme: 'off'
-          buildProperties: '-c Release'
+          buildProperties: '-Properties Configuration=Release'
 
