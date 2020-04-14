@@ -24,7 +24,6 @@ namespace MultiTenant.Core.Strategies
         public async Task<string> GetTenantIdentifierAsync()
         {
 
-            //HostResolutionStrategy.cs:line 26
             if (_httpContextAccessor.HttpContext is null)
             {
                 return null;
