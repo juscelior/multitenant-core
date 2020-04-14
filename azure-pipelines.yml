@@ -27,10 +27,14 @@ stages:
           projects: '**/MultiTenant.Core.csproj'
           arguments: '-c Release'
 
-      - task: NuGetCommand@2
+      - task: DotNetCoreCLI@2
         inputs:
           command: 'pack'
+          configuration: 'Release'
           packagesToPack: '**/MultiTenant.Core.csproj'
-          versioningScheme: 'off'
-          buildProperties: '-Properties Configuration=Release'
+          nobuild: true
+          versioningScheme: 'byPrereleaseNumber'
+          majorVersion: '1'
+          minorVersion: '0'
+          patchVersion: '0'
 
