@@ -19,8 +19,7 @@ namespace MultiTenant.Core.Strategies
         /// <summary>
         /// Get the tenant identifier
         /// </summary>
-        /// <param name="context"></param>
-        /// <returns></returns>
+        /// <returns>host</returns>
         public async Task<string> GetTenantIdentifierAsync()
         {
 
