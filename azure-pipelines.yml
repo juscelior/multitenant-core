@@ -26,3 +26,5 @@ stages:
           command: 'build'
           projects: '**/MultiTenant.Core.csproj'
           arguments: '-c Release'
+
+          
