@@ -15,11 +15,13 @@ stages:
     - job:
       steps:
       - task: DotNetCoreCLI@2
+        displayName: Restore
         inputs:
           command: 'restore'
           projects: '**/MultiTenant.Core.csproj'
 
       - task: DotNetCoreCLI@2
+        displayName: Build
         inputs:
           command: 'build'
           projects: '**/MultiTenant.Core.csproj'
