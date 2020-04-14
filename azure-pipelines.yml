@@ -27,4 +27,9 @@ stages:
           projects: '**/MultiTenant.Core.csproj'
           arguments: '-c Release'
 
-          
+
+      - task: NuGetCommand@2
+        inputs:
+          command: 'pack'
+          packagesToPack: '**/MultiTenant.Core.csproj'
+          versioningScheme: 'byBuildNumber'
