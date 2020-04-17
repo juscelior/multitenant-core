@@ -2,6 +2,7 @@
 using Autofac.Core;
 using Autofac.Core.Lifetime;
 using Autofac.Core.Resolving;
+using Microsoft.AspNetCore.Http;
 using MultiTenant.Core.Common.Service;
 using System;
 using System.Collections.Generic;
@@ -15,12 +16,12 @@ namespace MultiTenant.Core.Common.Container
         //This is the base application container
         private readonly IContainer _applicationContainer;
         //This action configures a container builder
-        private readonly Action<T, ContainerBuilder> _tenantContainerConfiguration;
+        private readonly Action<T, ContainerBuilder, IHttpContextAccessor> _tenantContainerConfiguration;
         //This dictionary keeps track of all of the tenant scopes that we have created
         private readonly Dictionary<string, ILifetimeScope> _tenantLifetimeScopes = new Dictionary<string, ILifetimeScope>();
         private readonly object _lock = new object();
 
-        public TenantContainer(IContainer applicationContainer, Action<T, ContainerBuilder> containerConfiguration)
+        public TenantContainer(IContainer applicationContainer, Action<T, ContainerBuilder, IHttpContextAccessor> containerConfiguration)
         {
             _tenantContainerConfiguration = containerConfiguration;
             _applicationContainer = applicationContainer;
@@ -108,7 +109,7 @@ namespace MultiTenant.Core.Common.Container
                 else
                 {
                     //This is a new tenant, configure a new lifetimescope for it using our tenant sensitive configuration method
-                    _tenantLifetimeScopes.Add(tenantId, _applicationContainer.BeginLifetimeScope(Constants.TenantTag, a => _tenantContainerConfiguration(GetCurrentTenant(), a)));
+                    _tenantLifetimeScopes.Add(tenantId, _applicationContainer.BeginLifetimeScope(Constants.TenantTag, a => _tenantContainerConfiguration(GetCurrentTenant(), a, _applicationContainer.Resolve<IHttpContextAccessor>())));
                     return _tenantLifetimeScopes[tenantId];
                 }
             }

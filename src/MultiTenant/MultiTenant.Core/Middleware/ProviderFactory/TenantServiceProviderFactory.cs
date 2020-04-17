@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using MultiTenant.Core.Common;
 using MultiTenant.Core.Common.Container;
@@ -10,9 +11,9 @@ namespace MultiTenant.Core.Middleware.ProviderFactory
     public class TenantServiceProviderFactory<T> : IServiceProviderFactory<ContainerBuilder> where T : Tenant
     {
 
-        public Action<T, ContainerBuilder> _tenantSerivcesConfiguration;
+        public Action<T, ContainerBuilder, IHttpContextAccessor> _tenantSerivcesConfiguration;
 
-        public TenantServiceProviderFactory(Action<T, ContainerBuilder> tenantSerivcesConfiguration)
+        public TenantServiceProviderFactory(Action<T, ContainerBuilder, IHttpContextAccessor> tenantSerivcesConfiguration)
         {
             _tenantSerivcesConfiguration = tenantSerivcesConfiguration;
         }

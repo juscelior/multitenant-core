@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using MultiTenant.Core.Common;
 using MultiTenant.Core.Common.Builder;
@@ -33,7 +34,7 @@ namespace MultiTenant.Core.Extensions
 
 
         //Provavel deprecated
-        public static IServiceProvider UseMultiTenantServiceProvider<T>(this IServiceCollection services, Action<T, ContainerBuilder> registerServicesForTenant) where T : Tenant
+        public static IServiceProvider UseMultiTenantServiceProvider<T>(this IServiceCollection services, Action<T, ContainerBuilder, IHttpContextAccessor> registerServicesForTenant) where T : Tenant
         {
             ContainerBuilder containerBuilder = new ContainerBuilder();
 

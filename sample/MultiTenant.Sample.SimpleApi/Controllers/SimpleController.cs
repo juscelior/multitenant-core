@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using MultiTenant.Core.Common;
 using MultiTenant.Core.Common.Interfaces;
 using MultiTenant.Core.Common.Service;
@@ -18,11 +19,13 @@ namespace MultiTenant.Sample.SimpleApi.Controllers
     public class SimpleController : ControllerBase
     {
         private readonly TenantAccessService<Tenant> _tenantService;
+        private readonly Settings _settings;
         private readonly OperationIdService _operationIdService;
-        public SimpleController(TenantAccessService<Tenant> tenantService, OperationIdService operationIdService)
+        public SimpleController(TenantAccessService<Tenant> tenantService, OperationIdService operationIdService, IOptionsSnapshot<Settings> settings)
         {
             _tenantService = tenantService;
             _operationIdService = operationIdService;
+            _settings = settings.Value;
         }
 
         /// <summary>
@@ -34,7 +37,7 @@ namespace MultiTenant.Sample.SimpleApi.Controllers
         {
             Tenant t = (await _tenantService.GetTenantAsync());
 
-            return new OkObjectResult(new { tenant = t, operationId = _operationIdService.Id });
+            return new OkObjectResult(new { tenant = t, operationId = _operationIdService.Id, settings = _settings });
         }
     }
 }
