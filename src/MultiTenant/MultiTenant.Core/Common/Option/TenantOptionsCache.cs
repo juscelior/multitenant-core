@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
+using MultiTenant.Core.Common.Interfaces;
 using MultiTenant.Core.Common.Service;
 using System;
 using System.Collections.Generic;
@@ -11,19 +14,27 @@ namespace MultiTenant.Core.Common.Option
     /// </summary>
     /// <typeparam name="TOptions"></typeparam>
     /// <typeparam name="TTenant"></typeparam>
-    public class TenantOptionsCache<TOptions, TTenant> : IOptionsMonitorCache<TOptions>
+    public class TenantOptionsCache<TOptions, TTenant> : IOptionsMonitorCache<TOptions>, ITenantConfigurationMonitor
         where TOptions : class
         where TTenant : Tenant
     {
-
+        private readonly IConfiguration _config;
         private readonly string _id;
         private readonly TenantOptionsCacheDictionary<TOptions> _tenantSpecificOptionsCache =
             new TenantOptionsCacheDictionary<TOptions>();
 
-        public TenantOptionsCache(TenantAccessService<TTenant> tenantService)
+        public TenantOptionsCache(IConfiguration config, TenantAccessService<TTenant> tenantService)
         {
             this._id = tenantService.GetTenantAsync().GetAwaiter().GetResult().Id;
+            this._config = config;
+
+            ChangeToken.OnChange<ITenantConfigurationMonitor>(
+                () => _config.GetReloadToken(),
+                InvokeChanged,
+                this);
         }
+
+        public bool NeedUpdate { get; set; } = false;
 
         public void Clear()
         {
@@ -32,8 +43,22 @@ namespace MultiTenant.Core.Common.Option
 
         public TOptions GetOrAdd(string name, Func<TOptions> createOptions)
         {
-            return _tenantSpecificOptionsCache.Get(this._id)
-                .GetOrAdd(name, createOptions);
+
+            if (this.NeedUpdate)
+            {
+                bool removed = this.TryRemove(name);
+                if (removed)
+                    this.NeedUpdate = false;
+
+                return this._tenantSpecificOptionsCache.Get(this._id)
+                    .GetOrAdd(name, createOptions);
+            }
+            else
+            {
+                return _tenantSpecificOptionsCache.Get(this._id)
+                    .GetOrAdd(name, createOptions);
+            }
+
         }
 
         public bool TryAdd(string name, TOptions options)
@@ -46,6 +71,11 @@ namespace MultiTenant.Core.Common.Option
         {
             return _tenantSpecificOptionsCache.Get(this._id)
                 .TryRemove(name);
+        }
+
+        private void InvokeChanged(ITenantConfigurationMonitor state)
+        {
+            state.NeedUpdate = true;
         }
     }
 }

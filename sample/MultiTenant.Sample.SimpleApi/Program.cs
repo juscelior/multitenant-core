@@ -30,11 +30,6 @@ namespace MultiTenant.Sample.SimpleApi
                             refreshOptions.Register(key: "General:Settings:Sentinel", label: LabelFilter.Null, refreshAll: true);
                         })
                         .UseFeatureFlags();
-                        //.ConfigureRefresh(refresh =>
-                        //{
-                        //    refresh.Register("80fdb3c0-5888-4295-bf40-ebee0e3cd8f3:Settings:Sentinel", refreshAll: true).SetCacheExpiration(new TimeSpan(0, 0, 30));
-                        //    refresh.Register("d6a114ee-89f3-42c6-8a9a-14fbc79737b4:Settings:Sentinel", refreshAll: true).SetCacheExpiration(new TimeSpan(0, 0, 30));
-                        //});
                     });
                 })
                 .UseStartup<Startup>();

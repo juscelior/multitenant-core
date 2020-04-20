@@ -86,7 +86,6 @@ namespace MultiTenant.Sample.SimpleApi
             {
                 configuration.GetSection($"{t.Id}:Settings").Bind(options);
             });
-
         }
     }
 }
