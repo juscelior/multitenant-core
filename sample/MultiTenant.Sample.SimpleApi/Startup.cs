@@ -40,7 +40,8 @@ namespace MultiTenant.Sample.SimpleApi
 
             services.AddMultiTenancy()
                 .WithResolutionStrategy<HostTenantResolutionStrategy>()
-               .WithStore<InMemoryTenantRepository>();
+                //.WithResolutionStrategy<HeaderTenantResolutionStrategy>()
+                .WithStore<InMemoryTenantRepository>();
 
             services.AddFeatureManagement().AddFeatureFilter<PercentageFilter>();
         }
@@ -53,7 +54,6 @@ namespace MultiTenant.Sample.SimpleApi
                 app.UseDeveloperExceptionPage();
             }
 
-            // Add the following line:
             app.UseAzureAppConfiguration();
 
             app.UseHttpsRedirection();
@@ -70,7 +70,7 @@ namespace MultiTenant.Sample.SimpleApi
             });
         }
 
-        public static void ConfigureMultiTenantServices(Tenant t, ContainerBuilder c, IHttpContextAccessor httpContextAccessor)
+        public static void ConfigureTenantServices(Tenant t, ContainerBuilder c, IHttpContextAccessor httpContextAccessor)
         {
             c.RegisterInstance(new OperationIdService()).SingleInstance();
 

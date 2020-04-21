@@ -15,9 +15,9 @@ namespace MultiTenant.Core.Common
         public string Id { get; set; }
 
         /// <summary>
-        /// The tenant identifier
+        /// The tenant DNS
         /// </summary>
-        public string Identifier { get; set; }
+        public string Dns { get; set; }
 
         /// <summary>
         /// Tenant items

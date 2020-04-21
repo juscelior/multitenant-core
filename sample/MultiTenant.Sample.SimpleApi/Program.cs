@@ -35,7 +35,7 @@ namespace MultiTenant.Sample.SimpleApi
                 .UseStartup<Startup>();
             })
             .UseServiceProviderFactory(
-                     new TenantServiceProviderFactory<Tenant>(Startup.ConfigureMultiTenantServices)
+                     new TenantServiceProviderFactory<Tenant>(Startup.ConfigureTenantServices)
                 );
     }
 }
