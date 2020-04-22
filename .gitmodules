@@ -1,0 +1,3 @@
+[submodule "sample/JPProject.IdentityServer4.AdminUI"]
+	path = sample/JPProject.IdentityServer4.AdminUI
+	url = https://github.com/juscelior/JPProject.IdentityServer4.AdminUI
