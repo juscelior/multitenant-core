@@ -14,6 +14,11 @@ stages:
   jobs:
     - job:
       steps:
+      - task: UseGitVersion@5
+        displayName: GitVersion 
+        inputs:
+          versionSpec: 'x.x.x'
+
       - task: DotNetCoreCLI@2
         displayName: Restore
         inputs:
@@ -25,7 +30,7 @@ stages:
         inputs:
           command: 'build'
           projects: '**/MultiTenant.Core.csproj'
-          arguments: '-c Release'
+          arguments: '-c Release /p:Version=$(GitVersion.NuGetVersion)'
 
       - task: DotNetCoreCLI@2
         displayName: Pack
@@ -34,10 +39,8 @@ stages:
           configuration: 'Release'
           packagesToPack: '**/MultiTenant.Core.csproj'
           nobuild: true
-          versioningScheme: 'byPrereleaseNumber'
-          majorVersion: '1'
-          minorVersion: '0'
-          patchVersion: '0'
+          versioningScheme: byEnvVar 
+          versionEnvVar: GitVersion.NuGetVersion
 
       - task: PublishBuildArtifacts@1
         displayName: Publish the package
