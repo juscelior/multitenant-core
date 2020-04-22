@@ -27,7 +27,7 @@ namespace MultiTenant.Sample.SimpleApi
                         options.Connect(settings["ConnectionStrings:AppConfig"])
                         .ConfigureRefresh(refreshOptions =>
                         {
-                            refreshOptions.Register(key: "General:Settings:Sentinel", label: LabelFilter.Null, refreshAll: true);
+                            refreshOptions.Register(key: "General:Settings:Sentinel", label: hostingContext.HostingEnvironment.EnvironmentName, refreshAll: true);
                         })
                         .UseFeatureFlags();
                     });

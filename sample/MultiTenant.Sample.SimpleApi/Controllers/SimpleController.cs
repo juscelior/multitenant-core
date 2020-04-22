@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -34,6 +35,19 @@ namespace MultiTenant.Sample.SimpleApi.Controllers
         /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult> GetAsync()
+        {
+            Tenant t = (await _tenantService.GetTenantAsync());
+
+            return new OkObjectResult(new { tenant = t, operationId = _operationIdService.Id, settings = _settings });
+        }
+
+        /// <summary>
+        /// Get the value
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("secure")]
+        [Authorize]
+        public async Task<ActionResult> GetSecureAsync()
         {
             Tenant t = (await _tenantService.GetTenantAsync());
 
