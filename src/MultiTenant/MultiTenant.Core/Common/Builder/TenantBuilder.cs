@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MultiTenant.Core.Common.Interfaces;
 using MultiTenant.Core.Common.Service;
+using System;
 
 namespace MultiTenant.Core.Common.Builder
 {
@@ -41,6 +42,18 @@ namespace MultiTenant.Core.Common.Builder
         public TenantBuilder<T> WithStore<V>(ServiceLifetime lifetime = ServiceLifetime.Transient) where V : class, ITenantStore<T>
         {
             _services.Add(ServiceDescriptor.Describe(typeof(ITenantStore<T>), typeof(V), lifetime));
+            return this;
+        }
+
+        /// <summary>
+        /// Register the tenant store implementation
+        /// </summary>
+        /// <param name="implementationType"></param>
+        /// <param name="lifetime"></param>
+        /// <returns></returns>
+        public TenantBuilder<T> WithStore(Type implementationType, ServiceLifetime lifetime = ServiceLifetime.Transient)
+        {
+            _services.Add(ServiceDescriptor.Describe(typeof(ITenantStore<T>), implementationType, lifetime));
             return this;
         }
     }
